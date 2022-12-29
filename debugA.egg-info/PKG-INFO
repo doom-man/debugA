@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: debugA
+Version: 1.0.0
+Summary: use for jdb to debug android app
+Author: pareto
+License: MIT
+Keywords: Android Debug Activity
+
+# debugA
+
+通过adb 和 jdb 启动被调试的应用，在回车后自动进入jdb调试。
+
+```angular2html
+debugA -p packageName -a activityName
+```
