@@ -1,3 +1,12 @@
+Metadata-Version: 2.1
+Name: debugActivity
+Version: 1.0.0
+Summary: use for jdb to debug android app
+Author: pareto
+License: MIT
+Keywords: Android Debug Activity
+Description-Content-Type: text/markdown
+
 # debugA
 
 优化android lldb调试的一个环节 , 通过adb 和 jdb 启动被调试的应用，在回车后自动进入jdb调试。
@@ -14,11 +23,4 @@ options:
 -a ACTIVITY, --activity ACTIVITY
 
 -p packageNmae -a AcivityName
-```
-
-记录下打包流程，
-```angular2html
-python setup.py bdist_wheel --universal
-twine upload dist/*
-HTTPS_PROXY=socks5://192.168.50.47:7890 twine upload dist/*
 ```

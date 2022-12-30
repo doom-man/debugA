@@ -1,0 +1,2 @@
+[console_scripts]
+debugActivity = debugActivity.main:main

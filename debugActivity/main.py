@@ -11,7 +11,7 @@ import logging
 logger = logging.getLogger("frida-dexdump")
 
 parser = argparse.ArgumentParser(
-    prog='debugA',
+    prog='debugActivity',
     description='start a debug activity',
     epilog='-p packageNmae\n -a AcivityName')
 

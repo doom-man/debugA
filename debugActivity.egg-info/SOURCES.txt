@@ -1,0 +1,9 @@
+setup.cfg
+setup.py
+debugActivity/__init__.py
+debugActivity/main.py
+debugActivity.egg-info/PKG-INFO
+debugActivity.egg-info/SOURCES.txt
+debugActivity.egg-info/dependency_links.txt
+debugActivity.egg-info/entry_points.txt
+debugActivity.egg-info/top_level.txt

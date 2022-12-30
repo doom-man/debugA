@@ -6,10 +6,11 @@ import sys
 import setuptools
 
 setuptools.setup(
-    name="debugA",
+    name="debugActivity",
     version="1.0.0",
     keywords="Android Debug Activity",
     description="use for jdb to debug android app",
+    long_description_content_type="text/markdown",
     long_description=open(
         os.path.join(
             os.path.dirname(__file__),
@@ -21,7 +22,7 @@ setuptools.setup(
     license="MIT",
     entry_points={
         'console_scripts': [
-            'debugA = debugA.main:main'
+            'debugActivity = debugActivity.main:main'
         ]
     }
 )
