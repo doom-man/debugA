@@ -8,7 +8,7 @@ import argparse
 import subprocess
 import logging
 
-logger = logging.getLogger("frida-dexdump")
+logger = logging.getLogger("debugActivity")
 
 parser = argparse.ArgumentParser(
     prog='debugActivity',
@@ -38,6 +38,8 @@ def main():
     # command
     # getpid = "adb shell \" ps | grep {0} | awk '{{print $2}}'\"".format(package);
     spid = subprocess.run(getpid, shell=True, capture_output=True, text=True).stdout
+
+    print("app pid :"+spid)
 
     spid = "adb forward tcp:8700 jdwp:{0}".format(spid)
     spid = spid.replace('\n', '')

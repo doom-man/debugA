@@ -1,9 +1,0 @@
-setup.cfg
-setup.py
-debugA/__init__.py
-debugA/main.py
-debugA.egg-info/PKG-INFO
-debugA.egg-info/SOURCES.txt
-debugA.egg-info/dependency_links.txt
-debugA.egg-info/entry_points.txt
-debugA.egg-info/top_level.txt

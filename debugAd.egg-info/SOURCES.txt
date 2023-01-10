@@ -1,9 +1,0 @@
-setup.cfg
-setup.py
-debugAd/__init__.py
-debugAd/main.py
-debugAd.egg-info/PKG-INFO
-debugAd.egg-info/SOURCES.txt
-debugAd.egg-info/dependency_links.txt
-debugAd.egg-info/entry_points.txt
-debugAd.egg-info/top_level.txt
