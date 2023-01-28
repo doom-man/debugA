@@ -7,6 +7,7 @@ __version__ = "1.0.0"
 import argparse
 import subprocess
 import logging
+import time
 
 logger = logging.getLogger("debugActivity")
 
@@ -31,6 +32,7 @@ def main():
     startcom = "adb shell am start -D {0}/{1}".format(package, activity)
 
     subprocess.run(startcom, shell=True, check=True)
+    time.sleep(1)
     # cmd
     # getpid = "adb shell \" ps -A| grep {0} | awk '{{print $2}}'\"".format(package);
     # bash
