@@ -8,6 +8,7 @@ import argparse
 import subprocess
 import logging
 import time
+import os
 
 logger = logging.getLogger("debugActivity")
 
@@ -16,13 +17,28 @@ parser = argparse.ArgumentParser(
     description='start a debug activity',
     epilog='-p packageNmae\n -a AcivityName')
 
+def  sign(path):
+    cwd = os.getcwd()
+    outpath = os.path.join(cwd,path)
+    apksigner = os.path.join(os.path.split(os.path.realpath(__file__))[0] , "apksigner/apksigner.jar")
+    jsk = os.path.join(os.path.split(os.path.realpath(__file__))[0] , "apksigner/pareto.jks")
+
+    args = "java -jar " + apksigner+  " sign " + "--ks "+jsk + " --ks-pass pass:pareto "+outpath
+
+    subprocess.run(args , shell=True , check=True)
 
 def main():
     # parser.add_argument('filename')
     parser.add_argument('-p', '--package')
     parser.add_argument('-a', '--activity')
+    parser.add_argument('-s' , '--sign')
 
     args = parser.parse_args()
+    
+    if(args.sign != None):
+        sign(args.sign)
+        return
+
     package = args.package
     activity = args.activity
     if (package == None or activity == None):
