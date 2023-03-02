@@ -15,25 +15,27 @@ logger = logging.getLogger("debugActivity")
 parser = argparse.ArgumentParser(
     prog='debugActivity',
     description='start a debug activity',
-    epilog='-p packageNmae\n -a AcivityName')
+    epilog='-p packageName\n -a AcivityName -s signApkPath')
 
-def  sign(path):
+
+def sign(path):
     cwd = os.getcwd()
-    outpath = os.path.join(cwd,path)
-    apksigner = os.path.join(os.path.split(os.path.realpath(__file__))[0] , "apksigner/apksigner.jar")
-    jsk = os.path.join(os.path.split(os.path.realpath(__file__))[0] , "apksigner/pareto.jks")
-    args = "java -jar " + apksigner+  " sign " + "--ks "+jsk + " --ks-pass pass:pareto "+outpath
-    subprocess.run(args , shell=True , check=True)
+    outpath = os.path.join(cwd, path)
+    apksigner = os.path.join(os.path.split(os.path.realpath(__file__))[0], "apksigner","apksigner.jar")
+    jsk = os.path.join(os.path.split(os.path.realpath(__file__))[0], "apksigner","pareto.jks")
+    args = "java -jar " + apksigner + " sign " + "--ks " + jsk + " --ks-pass pass:pareto " + outpath
+    subprocess.run(args, shell=True, check=True)
+
 
 def main():
     # parser.add_argument('filename')
     parser.add_argument('-p', '--package')
     parser.add_argument('-a', '--activity')
-    parser.add_argument('-s' , '--sign')
+    parser.add_argument('-s', '--sign')
 
     args = parser.parse_args()
-    
-    if(args.sign != None):
+
+    if (args.sign != None):
         sign(args.sign)
         return
 
@@ -48,9 +50,9 @@ def main():
     subprocess.run(startcom, shell=True, check=True)
     time.sleep(1)
 
-    if os.name in ('nt' , 'dox'):
+    if os.name in ('nt', 'dox'):
         getpid = "adb shell \" ps | grep {0} | awk '{{print $2}}'\"".format(package);
-    elif os.name in('linux'  , 'osx' , 'posix'):
+    elif os.name in ('linux', 'osx', 'posix'):
         getpid = "adb shell \" ps -A| grep {0} | awk '{{print \$2}}'\"".format(package);
 
     # cmd
@@ -61,7 +63,7 @@ def main():
     # getpid = "adb shell \" ps | grep {0} | awk '{{print $2}}'\"".format(package);
     spid = subprocess.run(getpid, shell=True, capture_output=True, text=True).stdout
 
-    print("app pid :"+spid)
+    print("app pid :" + spid)
 
     spid = "adb forward tcp:8700 jdwp:{0}".format(spid)
     spid = spid.replace('\n', '')

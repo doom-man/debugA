@@ -12,8 +12,7 @@ options:
 -h, --help            show this help message and exit
 -p PACKAGE, --package PACKAGE
 -a ACTIVITY, --activity ACTIVITY
-
--p packageNmae -a AcivityName
+-s SIGN signApkPath
 ```
 
 记录下打包流程，
