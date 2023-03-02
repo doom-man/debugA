@@ -22,9 +22,7 @@ def  sign(path):
     outpath = os.path.join(cwd,path)
     apksigner = os.path.join(os.path.split(os.path.realpath(__file__))[0] , "apksigner/apksigner.jar")
     jsk = os.path.join(os.path.split(os.path.realpath(__file__))[0] , "apksigner/pareto.jks")
-
     args = "java -jar " + apksigner+  " sign " + "--ks "+jsk + " --ks-pass pass:pareto "+outpath
-
     subprocess.run(args , shell=True , check=True)
 
 def main():
@@ -49,10 +47,16 @@ def main():
 
     subprocess.run(startcom, shell=True, check=True)
     time.sleep(1)
+
+    if os.name in ('nt' , 'dox'):
+        getpid = "adb shell \" ps | grep {0} | awk '{{print $2}}'\"".format(package);
+    elif os.name in('linux'  , 'osx' , 'posix'):
+        getpid = "adb shell \" ps -A| grep {0} | awk '{{print \$2}}'\"".format(package);
+
     # cmd
     # getpid = "adb shell \" ps -A| grep {0} | awk '{{print $2}}'\"".format(package);
     # bash
-    getpid = "adb shell \" ps -A| grep {0} | awk '{{print \$2}}'\"".format(package);
+    # getpid = "adb shell \" ps -A| grep {0} | awk '{{print \$2}}'\"".format(package);
     # command
     # getpid = "adb shell \" ps | grep {0} | awk '{{print $2}}'\"".format(package);
     spid = subprocess.run(getpid, shell=True, capture_output=True, text=True).stdout
