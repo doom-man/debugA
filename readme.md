@@ -1,8 +1,17 @@
 # debugA
 
-优化android lldb调试的一个环节 , 通过adb 和 jdb 启动被调试的应用，在回车后自动进入jdb调试。
+优化android 分析过程、lldb调试流程 , 需要提前配置好java和adb环境，提前通过adb 和 jdb 启动被调试的应用。
 
+* 签名用内置的jks签名
+```
+debugActivity -s apkPath 
+```
+* 调试模式启动，jdb自动附加, 需要包名 和 mainActivity的名称
+```angular2html
+debugActivity -p packageName -a activityName
+```
 
+## usage
 ```angular2html
 usage: debugA [-h] [-p PACKAGE] [-a ACTIVITY]
 

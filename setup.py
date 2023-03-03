@@ -7,7 +7,7 @@ import setuptools
 
 setuptools.setup(
     name="debugActivity",
-    version="1.0.3",
+    version="1.0.4",
     keywords="Android Debug Activity",
     description="use for jdb to debug android app",
     long_description_content_type="text/markdown",
@@ -16,7 +16,7 @@ setuptools.setup(
             os.path.dirname(__file__),
             "readme.md"
         ),
-        encoding='gb18030',errors='ignore'
+        encoding='gb18030', errors='ignore'
     ).read(),
     author="pareto",
     packages=setuptools.find_packages(where='.', exclude=(), include=('*',)),
@@ -28,7 +28,7 @@ setuptools.setup(
     },
 
     package_data={
-        'debugActivity.apksigner' :["pareto.jks" ,"apksigner.jar"]
+        'debugActivity.apksigner': ["pareto.jks", "apksigner.jar"],
+        'debugActivity.lldbtools': ["lldb-server"]
     },
 )
-

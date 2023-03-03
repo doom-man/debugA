@@ -10,6 +10,8 @@ import logging
 import time
 import os
 
+from debugActivity.lldbtools.lldbtools import pushLLDBServer, grantPermission, startLLDBServer
+
 logger = logging.getLogger("debugActivity")
 
 parser = argparse.ArgumentParser(
@@ -17,14 +19,19 @@ parser = argparse.ArgumentParser(
     description='start a debug activity',
     epilog='-p packageName\n -a AcivityName -s signApkPath')
 
+scriptPath = os.path.split(os.path.realpath(__file__))[0]
+
 
 def sign(path):
     cwd = os.getcwd()
     outpath = os.path.join(cwd, path)
-    apksigner = os.path.join(os.path.split(os.path.realpath(__file__))[0], "apksigner","apksigner.jar")
-    jsk = os.path.join(os.path.split(os.path.realpath(__file__))[0], "apksigner","pareto.jks")
+    apksigner = os.path.join(scriptPath, "apksigner", "apksigner.jar")
+    jsk = os.path.join(scriptPath, "apksigner", "pareto.jks")
     args = "java -jar " + apksigner + " sign " + "--ks " + jsk + " --ks-pass pass:pareto " + outpath
     subprocess.run(args, shell=True, check=True)
+
+
+# def startLLDBServer():
 
 
 def main():
@@ -32,16 +39,21 @@ def main():
     parser.add_argument('-p', '--package')
     parser.add_argument('-a', '--activity')
     parser.add_argument('-s', '--sign')
+    parser.add_argument('-l', '--lldbserver', action='store_true')
 
     args = parser.parse_args()
-
-    if (args.sign != None):
-        sign(args.sign)
-        return
-
     package = args.package
     activity = args.activity
-    if (package == None or activity == None):
+
+    if args.lldbserver != False:
+        pushLLDBServer()
+        grantPermission()
+        startLLDBServer()
+        return
+    elif args.sign != None:
+        sign(args.sign)
+        return
+    elif package == None or activity == None:
         parser.print_help()
         exit(0)
 
