@@ -10,7 +10,10 @@ debugActivity -s apkPath
 ```angular2html
 debugActivity -p packageName -a activityName
 ```
-
+* 自动将lldb-server推送到手机，并启动，绑定9999端口
+```
+debugActivity -l 
+```
 ## usage
 ```angular2html
 usage: debugA [-h] [-p PACKAGE] [-a ACTIVITY]
