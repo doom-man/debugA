@@ -24,11 +24,18 @@ scriptPath = os.path.split(os.path.realpath(__file__))[0]
 
 def sign(path):
     cwd = os.getcwd()
+    fileName = os.path.splitext(path)[0]
+    suffix = os.path.splitext(path)[-1]
     outpath = os.path.join(cwd, path)
+    tmpapk = os.path.join(cwd , "tmp.apk")
+    zipArgs = "zipalign " + " -v 4 " +  outpath + "  " + tmpapk
+    print(zipArgs)
+    subprocess.run(zipArgs, shell=True, check=True)
+
     apksigner = os.path.join(scriptPath, "apksigner", "apksigner.jar")
     jsk = os.path.join(scriptPath, "apksigner", "pareto.jks")
-    args = "java -jar " + apksigner + " sign " + "--ks " + jsk + " --ks-pass pass:pareto " + outpath
-    subprocess.run(args, shell=True, check=True)
+    signArgs = "java -jar " + apksigner + " sign " + "--ks " + jsk + " --ks-pass pass:pareto " + "--in " + tmpapk + " --out " + fileName+"_signed"+suffix
+    subprocess.run(signArgs, shell=True, check=True)
 
 
 # def startLLDBServer():
