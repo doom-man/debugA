@@ -14,6 +14,10 @@ debugActivity -p packageName -a activityName
 ```
 debugActivity -l 
 ```
+## 安装
+```
+pip install debugactivity
+```
 ## usage
 ```angular2html
 usage: debugA [-h] [-p PACKAGE] [-a ACTIVITY]
