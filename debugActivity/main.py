@@ -9,6 +9,7 @@ import subprocess
 import logging
 import time
 import os
+import tempfile
 
 from debugActivity.lldbtools.lldbtools import pushLLDBServer, grantPermission, startLLDBServer
 
@@ -27,14 +28,16 @@ def sign(path):
     fileName = os.path.splitext(path)[0]
     suffix = os.path.splitext(path)[-1]
     outpath = os.path.join(cwd, path)
-    tmpapk = os.path.join(cwd , "tmp.apk")
-    zipArgs = "zipalign " + " -v 4 " +  outpath + "  " + tmpapk
+    tmpDir = tempfile.TemporaryDirectory()
+    tmpApk = os.path.join(tmpDir.name, "temp.apk")
+    print(tmpApk)
+    zipArgs = "zipalign -f " + " -v 4 " +  outpath + "  " + tmpApk
     print(zipArgs)
     subprocess.run(zipArgs, shell=True, check=True)
 
     apksigner = os.path.join(scriptPath, "apksigner", "apksigner.jar")
     jsk = os.path.join(scriptPath, "apksigner", "pareto.jks")
-    signArgs = "java -jar " + apksigner + " sign " + "--ks " + jsk + " --ks-pass pass:pareto " + "--in " + tmpapk + " --out " + fileName+"_signed"+suffix
+    signArgs = "java -jar " + apksigner + " sign " + "--ks " + jsk + " --ks-pass pass:pareto " + "--in " + tmpApk + " --out " + fileName+"_signed"+suffix
     subprocess.run(signArgs, shell=True, check=True)
 
 
