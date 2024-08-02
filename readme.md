@@ -33,6 +33,8 @@ options:
 
 记录下打包流程，
 ```angular2html
+pip install wheel
+pip install twine
 python setup.py bdist_wheel --universal
 twine upload dist/*
 HTTPS_PROXY=socks5://192.168.50.47:7890 twine upload dist/*
