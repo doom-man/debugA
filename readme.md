@@ -29,6 +29,7 @@ options:
 -p PACKAGE, --package PACKAGE
 -a ACTIVITY, --activity ACTIVITY
 -s SIGN signApkPath
+-P process diff 对比前后的进程变化
 ```
 
 记录下打包流程，
@@ -36,6 +37,6 @@ options:
 pip install wheel
 pip install twine
 python setup.py bdist_wheel --universal
-twine upload dist/*
+twine upload dist/* --repository PROJECT_NAME
 HTTPS_PROXY=socks5://192.168.50.47:7890 twine upload dist/*
 ```

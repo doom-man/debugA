@@ -7,7 +7,7 @@ import setuptools
 
 setuptools.setup(
     name="debugActivity",
-    version="1.0.6",
+    version="1.0.7",
     keywords="Android Debug Activity",
     description="use for jdb to debug android app",
     long_description_content_type="text/markdown",

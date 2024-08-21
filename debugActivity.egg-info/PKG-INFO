@@ -1,26 +1,53 @@
 Metadata-Version: 2.1
 Name: debugActivity
-Version: 1.0.0
+Version: 1.0.7
 Summary: use for jdb to debug android app
+Home-page: UNKNOWN
 Author: pareto
 License: MIT
+Description: # debugA
+        
+        浼樺寲android 鍒嗘瀽杩囩▼銆乴ldb璋冭瘯娴佺▼ , 闇瑕佹彁鍓嶉厤缃ソjava鍜宎db鐜锛屾彁鍓嶉氳繃adb 鍜 jdb 鍚姩琚皟璇曠殑搴旂敤銆
+        
+        * 绛惧悕鐢ㄥ唴缃殑jks绛惧悕
+        ```
+        debugActivity -s apkPath 
+        ```
+        * 璋冭瘯妯″紡鍚姩锛宩db鑷姩闄勫姞, 闇瑕佸寘鍚 鍜 mainActivity鐨勫悕绉
+        ```angular2html
+        debugActivity -p packageName -a activityName
+        ```
+        * 鑷姩灏唋ldb-server鎺ㄩ佸埌鎵嬫満锛屽苟鍚姩锛岀粦瀹9999绔彛
+        ```
+        debugActivity -l 
+        ```
+        ## 瀹夎
+        ```
+        pip install debugactivity
+        ```
+        ## usage
+        ```angular2html
+        usage: debugA [-h] [-p PACKAGE] [-a ACTIVITY]
+        
+        start a debug activity
+        
+        options:
+        -h, --help            show this help message and exit
+        -p PACKAGE, --package PACKAGE
+        -a ACTIVITY, --activity ACTIVITY
+        -s SIGN signApkPath
+        -P process diff 瀵规瘮鍓嶅悗鐨勮繘绋嬪彉鍖
+        ```
+        
+        璁板綍涓嬫墦鍖呮祦绋嬶紝
+        ```angular2html
+        pip install wheel
+        pip install twine
+        python setup.py bdist_wheel --universal
+        twine upload dist/*
+        HTTPS_PROXY=socks5://192.168.50.47:7890 twine upload dist/*
+        ```
+        
 Keywords: Android Debug Activity
+Platform: UNKNOWN
 Description-Content-Type: text/markdown
-
-# debugA
-
-优化android lldb调试的一个环节 , 通过adb 和 jdb 启动被调试的应用，在回车后自动进入jdb调试。
-
-
-```angular2html
-usage: debugA [-h] [-p PACKAGE] [-a ACTIVITY]
-
-start a debug activity
-
-options:
--h, --help            show this help message and exit
--p PACKAGE, --package PACKAGE
--a ACTIVITY, --activity ACTIVITY
-
--p packageNmae -a AcivityName
-```

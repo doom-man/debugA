@@ -7,3 +7,9 @@ debugActivity.egg-info/SOURCES.txt
 debugActivity.egg-info/dependency_links.txt
 debugActivity.egg-info/entry_points.txt
 debugActivity.egg-info/top_level.txt
+debugActivity/apksigner/__init__.py
+debugActivity/apksigner/apksigner.jar
+debugActivity/apksigner/pareto.jks
+debugActivity/lldbtools/__init__.py
+debugActivity/lldbtools/lldb-server
+debugActivity/lldbtools/lldbtools.py
