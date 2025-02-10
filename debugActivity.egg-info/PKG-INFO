@@ -1,27 +1,27 @@
 Metadata-Version: 2.1
 Name: debugActivity
-Version: 1.0.7
+Version: 1.0.8
 Summary: use for jdb to debug android app
 Home-page: UNKNOWN
 Author: pareto
 License: MIT
 Description: # debugA
         
-        浼樺寲android 鍒嗘瀽杩囩▼銆乴ldb璋冭瘯娴佺▼ , 闇瑕佹彁鍓嶉厤缃ソjava鍜宎db鐜锛屾彁鍓嶉氳繃adb 鍜 jdb 鍚姩琚皟璇曠殑搴旂敤銆
+        优化android 分析过程、lldb调试流程 , 需要提前配置好java和adb环境，提前通过adb 和 jdb 启动被调试的应用。
         
-        * 绛惧悕鐢ㄥ唴缃殑jks绛惧悕
+        * 签名用内置的jks签名
         ```
         debugActivity -s apkPath 
         ```
-        * 璋冭瘯妯″紡鍚姩锛宩db鑷姩闄勫姞, 闇瑕佸寘鍚 鍜 mainActivity鐨勫悕绉
+        * 调试模式启动，jdb自动附加, 需要包名 和 mainActivity的名称
         ```angular2html
         debugActivity -p packageName -a activityName
         ```
-        * 鑷姩灏唋ldb-server鎺ㄩ佸埌鎵嬫満锛屽苟鍚姩锛岀粦瀹9999绔彛
+        * 自动将lldb-server推送到手机，并启动，绑定9999端口
         ```
         debugActivity -l 
         ```
-        ## 瀹夎
+        ## 安装
         ```
         pip install debugactivity
         ```
@@ -36,15 +36,15 @@ Description: # debugA
         -p PACKAGE, --package PACKAGE
         -a ACTIVITY, --activity ACTIVITY
         -s SIGN signApkPath
-        -P process diff 瀵规瘮鍓嶅悗鐨勮繘绋嬪彉鍖
+        -P process diff 对比前后的进程变化
         ```
         
-        璁板綍涓嬫墦鍖呮祦绋嬶紝
+        记录下打包流程，
         ```angular2html
         pip install wheel
         pip install twine
         python setup.py bdist_wheel --universal
-        twine upload dist/*
+        twine upload dist/* --repository PROJECT_NAME
         HTTPS_PROXY=socks5://192.168.50.47:7890 twine upload dist/*
         ```
         

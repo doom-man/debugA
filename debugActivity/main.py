@@ -2,7 +2,7 @@
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-__version__ = "1.0.0"
+__version__ = "1.0.8"
 
 import argparse
 import subprocess
@@ -51,6 +51,7 @@ def main():
     parser.add_argument('-s', '--sign')
     parser.add_argument('-l', '--lldbserver', action='store_true')
     parser.add_argument('-P', '--process', action='store_true')
+    parser.add_argument('-f' , '--frida' , action='store_true')
 
     args = parser.parse_args()
     package = args.package
@@ -63,6 +64,21 @@ def main():
         return
     elif args.sign != None:
         sign(args.sign)
+        return
+    elif args.frida != False:
+        p = subprocess.Popen("adb shell ", shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
+        commands = [
+            "su",
+            "cd /data/local/tmp",
+            "ls",
+            "nohup ./frida-server &",
+        ]
+        try:
+            out, err = p.communicate(input="\n".join(commands), timeout=4)  # 不设置超时，就会卡在这里如果你知道为什么请告诉我
+        except subprocess.TimeoutExpired:
+            p.kill()
+            logger.debug("if nothing wrong , frida launched successful.\nor u can commit a issue\n")
+    
         return
     # -P 枚举进程，然后比较
     elif args.process !=None:

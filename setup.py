@@ -7,7 +7,7 @@ import setuptools
 
 setuptools.setup(
     name="debugActivity",
-    version="1.0.7",
+    version="1.0.8",
     keywords="Android Debug Activity",
     description="use for jdb to debug android app",
     long_description_content_type="text/markdown",
@@ -16,7 +16,7 @@ setuptools.setup(
             os.path.dirname(__file__),
             "readme.md"
         ),
-        encoding='gb18030', errors='ignore'
+        encoding='utf8', errors='ignore'
     ).read(),
     author="pareto",
     packages=setuptools.find_packages(where='.', exclude=(), include=('*',)),
