@@ -82,31 +82,23 @@ def main():
         return
     # -P 枚举进程，然后比较
     elif args.process !=None:
-        pscom = "adb shell ps -A -o PID"
+        pscom = "adb shell ps -A -o PID -o NAME"
         prcList0 = set()
         prcList1 = set()
         cmdResult = subprocess.run(pscom , shell=True , check=True , capture_output=True).stdout
-        lines = cmdResult.split()
+        lines = cmdResult.split(b'\r\n')
         for i in lines:
             prcList0.add(i.strip())
 
         input()
         cmdResult = subprocess.run(pscom , shell=True , check=True , capture_output=True).stdout
-        lines = cmdResult.split()
+        lines = cmdResult.split(b'\r\n')
         for i in lines:
             prcList1.add(i.strip())
 
         diffPrc = list(prcList1.difference(prcList0))
-        print(diffPrc)
         for i in diffPrc:
-            nameCom = "adb shell cat /proc/{0}/cmdline".format(i.decode("utf-8"))
-
-            try:
-                cmdResult = subprocess.run(nameCom , shell=True , check=True , capture_output=True).stdout
-                print(cmdResult.decode("utf-8"))
-            except :
-                print("process may died")
-
+            print(i)
 
         return
     elif package == None or activity == None:
