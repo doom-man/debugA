@@ -30,6 +30,7 @@ options:
 -a ACTIVITY, --activity ACTIVITY
 -s SIGN signApkPath
 -P process diff 对比前后的进程变化
+-f 运行/data/local/tmp/frida-server
 ```
 
 记录下打包流程，
