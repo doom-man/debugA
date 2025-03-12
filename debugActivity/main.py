@@ -56,6 +56,7 @@ def main():
     package = args.package
     activity = args.activity
 
+    print("process: " + str(args.process))
     if args.lldbserver != False:
         pushLLDBServer()
         grantPermission()
