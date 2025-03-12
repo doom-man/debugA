@@ -2,7 +2,6 @@
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-__version__ = "1.0.8"
 
 import argparse
 import subprocess
@@ -81,7 +80,7 @@ def main():
     
         return
     # -P 枚举进程，然后比较
-    elif args.process !=None:
+    elif args.process == True:
         pscom = "adb shell ps -A -o PID -o NAME"
         prcList0 = set()
         prcList1 = set()
