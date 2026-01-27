@@ -10,7 +10,11 @@ debugActivity -s apkPath
 ```angular2html
 debugActivity -p packageName -a activityName
 ```
-* 自动将lldb-server推送到手机，并启动，绑定9999端口
+* 推送调试服务端：lldb-server 和 frida-server（目标端重命名为 fda）
+```
+debugActivity --push-servers [--frida-server /path/to/frida-server]
+```
+* 启动 lldb-server（不负责推送），绑定 9999 端口
 ```
 debugActivity -l 
 ```
@@ -30,7 +34,7 @@ options:
 -a ACTIVITY, --activity ACTIVITY
 -s SIGN signApkPath
 -P process diff 对比前后的进程变化
--f 运行/data/local/tmp/frida-server
+-f 运行/data/local/tmp/fda
 ```
 
 记录下打包流程，

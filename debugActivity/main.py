@@ -10,7 +10,13 @@ import time
 import os
 import tempfile
 
-from debugActivity.lldbtools.lldbtools import pushLLDBServer, grantPermission, startLLDBServer
+from debugActivity.lldbtools.lldbtools import (
+    pushLLDBServer,
+    pushFridaServer,
+    grantPermission,
+    grantFridaPermission,
+    startLLDBServer,
+)
 
 logger = logging.getLogger("debugActivity")
 
@@ -51,14 +57,31 @@ def main():
     parser.add_argument('-l', '--lldbserver', action='store_true')
     parser.add_argument('-P', '--process', action='store_true')
     parser.add_argument('-f' , '--frida' , action='store_true')
+    parser.add_argument(
+        '--push-servers',
+        action='store_true',
+        help='push lldb-server and frida-server (rename frida-server to fda on device)'
+    )
+    parser.add_argument(
+        '--frida-server',
+        dest='frida_server',
+        default=None,
+        help='local path to frida-server binary (optional; can also set FRIDA_SERVER_PATH)'
+    )
 
     args = parser.parse_args()
     package = args.package
     activity = args.activity
 
     print("process: " + str(args.process))
-    if args.lldbserver != False:
+    if args.push_servers != False:
         pushLLDBServer()
+        pushFridaServer(args.frida_server)
+        grantPermission()
+        grantFridaPermission()
+        print("push servers done: /data/local/tmp/lldb-server and /data/local/tmp/fda")
+        return
+    elif args.lldbserver != False:
         grantPermission()
         startLLDBServer()
         return
@@ -71,7 +94,7 @@ def main():
             "su",
             "cd /data/local/tmp",
             "ls",
-            "nohup ./frida-server &",
+            "nohup ./fda &",
         ]
         try:
             out, err = p.communicate(input="\n".join(commands), timeout=4)  # 不设置超时，就会卡在这里如果你知道为什么请告诉我
@@ -113,7 +136,7 @@ def main():
     if os.name in ('nt', 'dox'):
         getpid = "adb shell \" ps | grep {0} | awk '{{print $2}}'\"".format(package);
     elif os.name in ('linux', 'osx', 'posix'):
-        getpid = "adb shell \" ps -A| grep {0} | awk '{{print \$2}}'\"".format(package);
+        getpid = "adb shell \" ps -A| grep {0} | awk '{{print \\$2}}'\"".format(package);
 
     # cmd
     # getpid = "adb shell \" ps -A| grep {0} | awk '{{print $2}}'\"".format(package);
