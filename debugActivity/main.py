@@ -9,6 +9,7 @@ import logging
 import time
 import os
 import tempfile
+import re
 
 from debugActivity.lldbtools.lldbtools import pushLLDBServer, grantPermission, startLLDBServer
 
@@ -20,6 +21,83 @@ parser = argparse.ArgumentParser(
     epilog='-p packageName\n -a AcivityName -s signApkPath')
 
 scriptPath = os.path.split(os.path.realpath(__file__))[0]
+
+
+_PS_LINE_RE = re.compile(r"^\s*(\d+)\s+(.+?)\s*$")
+
+
+def _extract_block(text: str, begin_marker: str, end_marker: str) -> str:
+    in_block = False
+    out_lines: list[str] = []
+    for line in text.splitlines():
+        if begin_marker in line:
+            in_block = True
+            continue
+        if in_block and end_marker in line:
+            break
+        if in_block:
+            out_lines.append(line)
+    return "\n".join(out_lines)
+
+
+def _parse_ps_pid_name(text: str) -> set[str]:
+    """
+    Parse output of: ps -A -o PID -o NAME
+
+    Returns a set of "PID NAME" lines, normalized, filtering prompts/echo lines.
+    """
+    out: set[str] = set()
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if line.upper().startswith("PID"):
+            continue
+        m = _PS_LINE_RE.match(line)
+        if not m:
+            continue
+        out.add(f"{m.group(1)} {m.group(2)}")
+    return out
+
+
+def _adb_shell_interactive(commands: list[str], timeout: int = 10) -> str:
+    """
+    Run multiple commands in a single `adb shell` interactive session.
+    """
+    p = subprocess.Popen(
+        ["adb", "shell"],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+    )
+    try:
+        stdout, _ = p.communicate(input="\n".join(commands) + "\n", timeout=timeout)
+        return stdout or ""
+    except subprocess.TimeoutExpired:
+        p.kill()
+        raise
+
+
+def _ps_pid_name_via_adb_shell_su(timeout: int = 10) -> tuple[set[str], str]:
+    """
+    Execute `adb shell` -> `su` -> `ps -A -o PID -o NAME` in three steps, and return parsed set + raw output.
+    """
+    begin = "__DEBUGACTIVITY_PS_BEGIN__"
+    end = "__DEBUGACTIVITY_PS_END__"
+    raw = _adb_shell_interactive(
+        [
+            "su",
+            f"echo {begin}",
+            "ps -A -o PID -o NAME",
+            f"echo {end}",
+            "exit",
+            "exit",
+        ],
+        timeout=timeout,
+    )
+    ps_block = _extract_block(raw, begin, end)
+    return _parse_ps_pid_name(ps_block), raw
 
 
 def sign(path):
@@ -82,23 +160,24 @@ def main():
         return
     # -P 枚举进程，然后比较
     elif args.process == True:
-        pscom = "adb shell ps -A -o PID -o NAME"
-        prcList0 = set()
-        prcList1 = set()
-        cmdResult = subprocess.run(pscom , shell=True , check=True , capture_output=True).stdout
-        lines = cmdResult.split(b'\r\n')
-        for i in lines:
-            prcList0.add(i.strip())
+        prcList0, raw0 = _ps_pid_name_via_adb_shell_su(timeout=10)
+        print(f"[snapshot0] count={len(prcList0)}")
 
-        input()
-        cmdResult = subprocess.run(pscom , shell=True , check=True , capture_output=True).stdout
-        lines = cmdResult.split(b'\r\n')
-        for i in lines:
-            prcList1.add(i.strip())
+        input("Press Enter to take snapshot1...")
+        prcList1, raw1 = _ps_pid_name_via_adb_shell_su(timeout=10)
+        print(f"[snapshot1] count={len(prcList1)}")
 
-        diffPrc = list(prcList1.difference(prcList0))
+        diffPrc = sorted(prcList1.difference(prcList0))
+        print(f"[diff] new_process_count={len(diffPrc)}")
         for i in diffPrc:
             print(i)
+
+        if len(prcList0) == 0 or len(prcList1) == 0:
+            print("\n[warn] ps parsed result is empty; dumping raw adb shell output for debugging.\n")
+            print("----- raw snapshot0 -----")
+            print(raw0)
+            print("----- raw snapshot1 -----")
+            print(raw1)
 
         return
     elif package == None or activity == None:
@@ -113,7 +192,7 @@ def main():
     if os.name in ('nt', 'dox'):
         getpid = "adb shell \" ps | grep {0} | awk '{{print $2}}'\"".format(package);
     elif os.name in ('linux', 'osx', 'posix'):
-        getpid = "adb shell \" ps -A| grep {0} | awk '{{print \$2}}'\"".format(package);
+        getpid = "adb shell \" ps -A| grep {0} | awk '{{print \\$2}}'\"".format(package);
 
     # cmd
     # getpid = "adb shell \" ps -A| grep {0} | awk '{{print $2}}'\"".format(package);
